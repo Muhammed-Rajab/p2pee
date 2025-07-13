@@ -1,5 +1,5 @@
 # basics
-cmake_minimum_required(VERSION 3.40)
+cmake_minimum_required(VERSION 3.28)
 project(p2pee)
 
 # set C++ version
@@ -13,7 +13,7 @@ include(FetchContent)
 FetchContent_Declare(
   json
   GIT_REPOSITORY https://github.com/nlohmann/json/
-  GIT_TAG 3.12.0
+  GIT_TAG v3.11.3
 )
 
 FetchContent_MakeAvailable(json)
@@ -27,6 +27,6 @@ add_executable(p2pee
   main.cpp
 )
 
-target link_libraries(p2pee PRIVATE
+target_link_libraries(p2pee PRIVATE
   nlohmann_json::nlohmann_json
 )
