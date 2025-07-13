@@ -25,14 +25,9 @@ int main(int argc, char **argv) {
 
   // let's test this thingy for now
 
-  Node n1("./private-1.pem", "./public-1.pem");
-  Node n2("./private-2.pem", "./public-2.pem");
-  Node test("./test.pem", "./test-public.pem");
+  Node N("./private-1.pem", "./public-1.pem", 6666);
 
-  n2.add_peer(n1.as_peer());
-  n2.add_peer(test.as_peer());
-
-  std::cout << n2.to_string() << std::endl;
+  std::cin.get();
 
   return EXIT_SUCCESS;
 }

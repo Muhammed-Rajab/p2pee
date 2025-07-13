@@ -78,7 +78,7 @@ private:
   }
 
 public:
-  Server(boost::asio::io_context &io_context, short port,
+  Server(boost::asio::io_context &io_context, unsigned short port,
          std::function<void(const std::string &, std::shared_ptr<Session>)>
              handler)
       : acceptor_(io_context, tcp::endpoint(tcp::v4(), port)),

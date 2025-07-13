@@ -1,27 +1,48 @@
 #ifndef NODE_4_P2PEE_HPP
 #define NODE_4_P2PEE_HPP
 
+#include <boost/asio/io_context.hpp>
 #include <iostream>
+#include <memory>
 #include <stdexcept>
 #include <string>
 #include <sys/types.h>
+#include <thread>
 #include <unordered_map>
 
 #include "keypair.hpp"
 #include "peer.hpp"
+#include "server.hpp"
 
 class Node {
 private:
   std::string id;
-  uint16_t port;
+  unsigned short port;
   std::string address;
 
   KeyPair keypair;
   std::unordered_map<std::string, Peer> known_peers;
 
+  // server related
+  boost::asio::io_context io_context;
+  Server server;
+  std::thread server_thread;
+
+  void handle_message(const std::string &msg,
+                      std::shared_ptr<Session> session) {
+    std::cout << "received: " << msg << std::endl;
+    session->send("echo: " + msg + "\n");
+  }
+
 public:
-  Node(const std::string &private_key_path, const std::string &public_key_path)
-      : keypair(private_key_path, public_key_path) {
+  Node(const std::string &private_key_path, const std::string &public_key_path,
+       short port_)
+      : keypair(private_key_path, public_key_path), port(port_),
+        server(
+            io_context, port,
+            [this](const std::string &msg, std::shared_ptr<Session> session) {
+              this->handle_message(msg, session);
+            }) {
 
     // verify
     if (!keypair.verify_pair()) {
@@ -34,13 +55,22 @@ public:
 
     // XXX: placeholdering address and port for testing purposes
     address = "127.0.0.1";
-    port = 6969;
 
     // create empty known peers
     known_peers = {};
+
+    // start server in bg
+    server_thread = std::thread([this]() {
+      std::cout << "[Node] running at " << address << ":" << port << "\n";
+      io_context.run();
+    });
   }
 
-  ~Node() {}
+  ~Node() {
+    io_context.stop();
+    if (server_thread.joinable())
+      server_thread.join();
+  }
 
   // getters
   std::string get_id() const { return id; }
