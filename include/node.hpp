@@ -2,8 +2,10 @@
 #define NODE_4_P2PEE_HPP
 
 #include <boost/asio/io_context.hpp>
+#include <filesystem>
 #include <iostream>
 #include <memory>
+#include <sstream>
 #include <stdexcept>
 #include <string>
 #include <sys/types.h>
@@ -30,8 +32,21 @@ private:
 
   void handle_message(const std::string &msg,
                       std::shared_ptr<Session> session) {
-    std::cout << "received: " << msg << std::endl;
-    session->send("echo: " + msg + "\n");
+
+    std::istringstream iss(msg);
+    std::string command;
+    iss >> command;
+
+    if (command == "PING") {
+      session->send("PONG\n");
+    } else if (command == "IDENTIFY") {
+      session->send("HELLO id=" + id + " address=" + address +
+                    " port=" + std::to_string(port) + "\n");
+    } else if (command == "PEERS") {
+      session->send("peer list will be sent soon\n");
+    } else {
+      session->send("ERROR unknown_command\n");
+    }
   }
 
 public:
