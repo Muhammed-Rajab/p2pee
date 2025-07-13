@@ -1,6 +1,8 @@
 #ifndef KEYPAIR_4_P2PEE_HPP
 #define KEYPAIR_4_P2PEE_HPP
 
+#include <iomanip>
+#include <stdexcept>
 #include <string>
 #include <vector>
 
@@ -66,6 +68,40 @@ public:
     EVP_MD_CTX_free(verify_ctx);
 
     return true;
+  }
+
+  std::string generate_id() const {
+    if (!public_key_) {
+      throw std::runtime_error("Public key is not loaded.");
+    }
+
+    BIO *mem = BIO_new(BIO_s_mem());
+    if (!PEM_write_bio_PUBKEY(mem, public_key_)) {
+      BIO_free(mem);
+      throw std::runtime_error("Failed to write public key to memory.");
+    }
+
+    char *data = nullptr;
+    long len = BIO_get_mem_data(mem, &data);
+    if (len <= 0 || !data) {
+      BIO_free(mem);
+      throw std::runtime_error("Failed to extract public key data.");
+    }
+
+    std::string pubkey_str(data, len);
+    BIO_free(mem);
+
+    unsigned char hash[SHA256_DIGEST_LENGTH];
+    SHA256(reinterpret_cast<const unsigned char *>(pubkey_str.c_str()),
+           pubkey_str.size(), hash);
+
+    std::ostringstream oss;
+    for (int i = 0; i < SHA256_DIGEST_LENGTH; ++i) {
+      oss << std::hex << std::setw(2) << std::setfill('0')
+          << static_cast<int>(hash[i]);
+    }
+
+    return oss.str();
   }
 
   EVP_PKEY *get_private() const { return private_key_; }

@@ -3,11 +3,7 @@
 #include <iostream>
 #include <string>
 
-#include <openssl/err.h>
-#include <openssl/pem.h>
-#include <openssl/rsa.h>
-
-#include "include/keypair.hpp"
+#include "include/node.hpp"
 
 int main(int argc, char **argv) {
 
@@ -23,14 +19,8 @@ int main(int argc, char **argv) {
   std::cout << "private key is at \"" << private_key_path << "\"" << std::endl;
   std::cout << "public key is at \"" << public_key_path << "\"" << std::endl;
 
-  KeyPair pair(private_key_path, public_key_path);
-
-  if (!pair.verify_pair()) {
-    std::cerr << "got invalid keys" << std::endl;
-    return EXIT_FAILURE;
-  } else {
-    std::cout << "shit is valid bruv!" << std::endl;
-  }
+  Node N(private_key_path, public_key_path);
+  std::cout << "node id is " << N.get_id() << std::endl;
 
   return EXIT_SUCCESS;
 }
