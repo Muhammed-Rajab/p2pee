@@ -32,5 +32,7 @@ int main(int argc, char **argv) {
   n2.add_peer(n1.as_peer());
   n2.add_peer(test.as_peer());
 
+  std::cout << n2.to_string() << std::endl;
+
   return EXIT_SUCCESS;
 }

@@ -55,15 +55,20 @@ public:
   Peer as_peer() const { return Peer{id, address, port}; }
 
   // peer management
-  void add_peer(const Peer &peer) { known_peers[peer.id] = peer; }
+  void add_peer(const Peer &peer) {
+    if (peer.id == id)
+      return;
+    known_peers[peer.id] = peer;
+  }
   void remove_peer(const std::string &peer_id) { known_peers.erase(peer_id); }
 
   // to string
   std::string to_string() const {
     std::ostringstream oss;
-    oss << "Node{id=" << id << ", known_peers=" << known_peers.size() << "}\n";
+    oss << "Node{id=" << id << ", address=" << address << ", port=" << port
+        << ", known_peers=" << known_peers.size() << "}\n";
     for (const auto &entry : known_peers) {
-      oss << "  " << entry.second.to_string();
+      oss << "  - " << entry.second.to_string() << "\n";
     }
     return oss.str();
   }
