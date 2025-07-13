@@ -18,6 +18,9 @@ FetchContent_Declare(
 
 FetchContent_MakeAvailable(json)
 
+# check for openssl
+find_package(OpenSSL REQUIRED)
+
 #----------------------------------------
 # executable setups
 #----------------------------------------
@@ -31,4 +34,6 @@ add_executable(p2pee
 
 target_link_libraries(p2pee PRIVATE
   nlohmann_json::nlohmann_json
+  OpenSSL::SSL
+  OpenSSL::Crypto
 )
