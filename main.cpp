@@ -7,46 +7,7 @@
 #include <openssl/pem.h>
 #include <openssl/rsa.h>
 
-EVP_PKEY *load_private_key(const std::string &path) {
-  FILE *fp = fopen(path.c_str(), "r");
-  if (!fp) {
-    std::cerr << "failed to open private key file: " << path << std::endl;
-    return nullptr;
-  }
-
-  EVP_PKEY *pkey = PEM_read_PrivateKey(fp, nullptr, nullptr, nullptr);
-  fclose(fp);
-
-  if (!pkey) {
-    std::cerr << "failed to load private key: path: '" << path << "'"
-              << std::endl;
-    ERR_print_errors_fp(stderr);
-    return nullptr;
-  }
-
-  return pkey;
-}
-
-EVP_PKEY *load_public_key(const std::string &path) {
-  FILE *fp = fopen(path.c_str(), "r");
-  if (!fp) {
-    std::cerr << "failed to open public key file: " << path << std::endl;
-    return nullptr;
-  }
-
-  EVP_PKEY *pkey = PEM_read_PUBKEY(fp, nullptr, nullptr, nullptr);
-  fclose(fp);
-
-  if (!pkey) {
-    std::cerr << "failed to load public key: path: '" << path << "'"
-              << std::endl;
-
-    ERR_print_errors_fp(stderr);
-    return nullptr;
-  }
-
-  return pkey;
-}
+#include "include/keypair.hpp"
 
 int main(int argc, char **argv) {
 
@@ -62,8 +23,14 @@ int main(int argc, char **argv) {
   std::cout << "private key is at \"" << private_key_path << "\"" << std::endl;
   std::cout << "public key is at \"" << public_key_path << "\"" << std::endl;
 
-  std::cout << "Hello, P2PEE" << std::endl;
+  KeyPair pair(private_key_path, public_key_path);
 
-  // TODO: load and use them keys;
+  if (!pair.verify_pair()) {
+    std::cerr << "got invalid keys" << std::endl;
+    return EXIT_FAILURE;
+  } else {
+    std::cout << "shit is valid bruv!" << std::endl;
+  }
+
   return EXIT_SUCCESS;
 }

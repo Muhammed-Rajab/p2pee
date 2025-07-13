@@ -22,6 +22,8 @@ FetchContent_MakeAvailable(json)
 # executable setups
 #----------------------------------------
 
+include_directories(include)
+
 # 1. p2pee
 add_executable(p2pee
   main.cpp
