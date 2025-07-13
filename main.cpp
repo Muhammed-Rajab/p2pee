@@ -7,20 +7,30 @@
 
 int main(int argc, char **argv) {
 
-  if (argc < 3) {
-    std::cerr << "Usage: " << argv[0]
-              << " <private_key.pem> <public_key.pem>\n";
-    return EXIT_FAILURE;
-  }
+  // if (argc < 3) {
+  //   std::cerr << "Usage: " << argv[0]
+  //             << " <private_key.pem> <public_key.pem>\n";
+  //   return EXIT_FAILURE;
+  // }
+  //
+  // std::string private_key_path = argv[1];
+  // std::string public_key_path = argv[2];
+  //
+  // std::cout << "private key is at \"" << private_key_path << "\"" <<
+  // std::endl; std::cout << "public key is at \"" << public_key_path << "\"" <<
+  // std::endl;
+  //
+  // Node N(private_key_path, public_key_path);
+  // std::cout << "node id is " << N.get_id() << std::endl;
 
-  std::string private_key_path = argv[1];
-  std::string public_key_path = argv[2];
+  // let's test this thingy for now
 
-  std::cout << "private key is at \"" << private_key_path << "\"" << std::endl;
-  std::cout << "public key is at \"" << public_key_path << "\"" << std::endl;
+  Node n1("./private-1.pem", "./public-1.pem");
+  Node n2("./private-2.pem", "./public-2.pem");
+  Node test("./test.pem", "./test-public.pem");
 
-  Node N(private_key_path, public_key_path);
-  std::cout << "node id is " << N.get_id() << std::endl;
+  n2.add_peer(n1.as_peer());
+  n2.add_peer(test.as_peer());
 
   return EXIT_SUCCESS;
 }

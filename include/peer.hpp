@@ -15,7 +15,7 @@ struct Peer {
   Peer(const std::string &id_, const std::string &address_, uint16_t port_)
       : id(id_), address(address_), port(port_) {}
 
-  std::string string() const {
+  std::string to_string() const {
     std::ostringstream oss;
     oss << "Peer{id=" << id << ", address=" << address << ", port=" << port
         << "}";
