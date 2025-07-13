@@ -21,6 +21,9 @@ FetchContent_MakeAvailable(json)
 # check for openssl
 find_package(OpenSSL REQUIRED)
 
+# check for boost
+find_package(Boost REQUIRED COMPONENTS system)
+
 #----------------------------------------
 # executable setups
 #----------------------------------------
@@ -36,4 +39,5 @@ target_link_libraries(p2pee PRIVATE
   nlohmann_json::nlohmann_json
   OpenSSL::SSL
   OpenSSL::Crypto
+  Boost::system
 )
