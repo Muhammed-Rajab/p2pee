@@ -25,7 +25,7 @@ void Protocol::handle(const std::string &message,
     auto j = json::parse(message);
 
     if (!j.contains("type")) {
-      handle_unknown("MISSING_TYPE", session);
+      handle_missing_type(session);
       return;
     }
 
@@ -57,6 +57,12 @@ void Protocol::handle_unknown(const std::string &type,
                               std::shared_ptr<Session> session) {
   json response = {{"type", "ERROR"},
                    {"message", "unknown message type: " + type}};
+
+  session->send(response.dump() + "\n");
+}
+
+void Protocol::handle_missing_type(std::shared_ptr<Session> session) {
+  json response = {{"type", "ERROR"}, {"message", "missing type"}};
 
   session->send(response.dump() + "\n");
 }

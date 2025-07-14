@@ -13,6 +13,7 @@ private:
   void handle_ping(std::shared_ptr<Session> session);
   void handle_unknown(const std::string &type,
                       std::shared_ptr<Session> session);
+  void handle_missing_type(std::shared_ptr<Session> session);
 
 public:
   Protocol(Node &node_);

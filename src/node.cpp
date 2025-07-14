@@ -1,5 +1,7 @@
 #include "node.hpp"
 
+#include "protocol.hpp"
+
 // PUBLIC
 Node::Node(const std::string &private_key_path,
            const std::string &public_key_path, short port_)
@@ -74,5 +76,6 @@ std::string Node::to_string() const {
 void Node::handle_message(const std::string &msg,
                           std::shared_ptr<Session> session) {
   // use protocol here
-  session->send("idk how the fuck am i supposed to handle protocols\n");
+  Protocol ptcol(*this);
+  ptcol.handle(msg, session);
 }
