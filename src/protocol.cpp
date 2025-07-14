@@ -40,6 +40,9 @@ void Protocol::handle(const std::string &message,
 
   } catch (const std::exception &e) {
     std::cout << "error parsing json" << std::endl;
+
+    // XXX: Only do this on development. you don't need end users to know about
+    // internal stuff
     json response = {{"type", "ERROR"},
                      {"message", std::string("invalid json: ") + e.what()}};
     session->send(response.dump() + "\n");
