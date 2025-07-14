@@ -32,7 +32,7 @@ struct Peer {
   // TODO: add a method to verify the ID by hashing the public_key
 };
 
-void to_json(nlohmann::json &j, const Peer &peer) {
+inline void to_json(nlohmann::json &j, const Peer &peer) {
   j = nlohmann::json{
       {"id", peer.id},
       {"address", peer.address},

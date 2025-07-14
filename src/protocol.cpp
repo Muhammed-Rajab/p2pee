@@ -68,10 +68,6 @@ void Protocol::handle_ping(std::shared_ptr<Session> session) {
 // HELLO
 void Protocol::handle_hello(const json &data,
                             std::shared_ptr<Session> session) {
-  session->send("heres hi!\n");
-  // receives id, addr, port and public key of peer
-  // sent WELCOME back to client with id
-
   // get all data
   try {
     if (!data.contains("id") || !data.contains("address") ||
@@ -108,6 +104,12 @@ void Protocol::handle_hello(const json &data,
                   {"message", "exception: " + std::string(e.what())}};
     session->send(error.dump() + "\n");
   }
+
+  // XXX: debug after hello
+  std::cout << "========================================" << std::endl;
+  std::cout << "NODE STATE AFTER HELLO: " << std::endl;
+  std::cout << node.to_string() << std::endl;
+  std::cout << "========================================" << std::endl;
 }
 
 // PEERS
