@@ -14,6 +14,7 @@ private:
 
   void handle_ping(std::shared_ptr<Session> session);
   void handle_hello(const json &data, std::shared_ptr<Session> session);
+  void handle_peers(const json &data, std::shared_ptr<Session> session);
 
   void handle_unknown(const std::string &type,
                       std::shared_ptr<Session> session);

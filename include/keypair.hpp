@@ -108,6 +108,26 @@ public:
 
   EVP_PKEY *get_public() const { return public_key_; }
 
+  std::string get_public_as_string() const {
+
+    BIO *bio = BIO_new(BIO_s_mem());
+    if (!bio)
+      throw std::runtime_error("Failed to create BIO");
+
+    if (!PEM_write_bio_PUBKEY(bio, this->public_key_)) {
+      BIO_free(bio);
+      throw std::runtime_error("Failed to write public key");
+    }
+
+    BUF_MEM *bufferPtr;
+    BIO_get_mem_ptr(bio, &bufferPtr);
+
+    std::string pubKeyStr(bufferPtr->data, bufferPtr->length);
+
+    BIO_free(bio);
+    return pubKeyStr;
+  }
+
 private:
   EVP_PKEY *private_key_ = nullptr;
   EVP_PKEY *public_key_ = nullptr;

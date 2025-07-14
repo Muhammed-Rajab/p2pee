@@ -49,7 +49,9 @@ const std::unordered_map<std::string, Peer> &Node::get_known_peers() const {
 }
 
 // conversion
-Peer Node::to_peer() const { return Peer{id, address, port}; }
+Peer Node::to_peer() const {
+  return Peer{id, address, port, keypair.get_public_as_string()};
+}
 
 // peer management
 void Node::add_peer(const Peer &peer) {
