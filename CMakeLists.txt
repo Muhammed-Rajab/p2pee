@@ -33,6 +33,12 @@ include_directories(include)
 # 1. p2pee
 add_executable(p2pee
   main.cpp
+  src/node.cpp
+  src/protocol.cpp
+)
+
+target_include_directories(p2pee PRIVATE
+  ${json_SOURCE_DIR}/include
 )
 
 target_link_libraries(p2pee PRIVATE
