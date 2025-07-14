@@ -5,12 +5,17 @@
 #include "node.hpp"
 #include "server.hpp"
 
+#include <nlohmann/json.hpp>
+
 class Protocol {
 
 private:
   Node &node;
 
   void handle_ping(std::shared_ptr<Session> session);
+  void handle_hello(const json::object_t &data,
+                    std::shared_ptr<Session> session);
+
   void handle_unknown(const std::string &type,
                       std::shared_ptr<Session> session);
   void handle_missing_type(std::shared_ptr<Session> session);

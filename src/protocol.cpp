@@ -1,6 +1,9 @@
+#include "nlohmann/json_fwd.hpp"
 #include "node.hpp"
 
 #include "protocol.hpp"
+
+using json = nlohmann::json;
 
 // PUBLIC METHODS
 Protocol::Protocol(Node &node_) : node(node_) {}
@@ -34,6 +37,8 @@ void Protocol::handle(const std::string &message,
 
     if (type == "PING") {
       handle_ping(session);
+    } else if (type == "HELLO") {
+      handle_hello(data, session);
     } else {
       handle_unknown(type, session);
     }
@@ -54,6 +59,11 @@ void Protocol::handle(const std::string &message,
 void Protocol::handle_ping(std::shared_ptr<Session> session) {
   json response = {{"type", "PONG"}};
   session->send(response.dump() + "\n");
+}
+
+void Protocol::handle_hello(const json::object_t &data,
+                            std::shared_ptr<Session> session) {
+  session->send("heres hi!\n");
 }
 
 void Protocol::handle_unknown(const std::string &type,
