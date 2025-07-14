@@ -61,7 +61,7 @@ void Protocol::handle_ping(std::shared_ptr<Session> session) {
   session->send(response.dump() + "\n");
 }
 
-void Protocol::handle_hello(const json::object_t &data,
+void Protocol::handle_hello(const json &data,
                             std::shared_ptr<Session> session) {
   session->send("heres hi!\n");
 }

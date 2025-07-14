@@ -13,8 +13,7 @@ private:
   Node &node;
 
   void handle_ping(std::shared_ptr<Session> session);
-  void handle_hello(const json::object_t &data,
-                    std::shared_ptr<Session> session);
+  void handle_hello(const json &data, std::shared_ptr<Session> session);
 
   void handle_unknown(const std::string &type,
                       std::shared_ptr<Session> session);
