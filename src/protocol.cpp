@@ -88,6 +88,7 @@ void Protocol::handle_hello(const json &data,
     Peer peer(peer_id, address, port, public_key);
 
     // TODO: verify id with public key
+    // TODO: peer sanitization to make sure we don't mess up
 
     // add to peers
     node.add_peer(peer);
