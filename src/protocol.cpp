@@ -116,9 +116,15 @@ void Protocol::handle_hello(const json &data,
 // PEERS
 void Protocol::handle_peers(const json &data,
                             std::shared_ptr<Session> session) {
-  session->send("heres peers!\n");
-  // receives request for peers
-  // sent PEERS back to client list of peer details
+  // TODO: Maybe also get ID from the peer and give peer list only if the
+  // requester is also a PEER?
+  json peer_list = json::array();
+  for (const auto &[id, peer] : node.get_known_peers()) {
+    peer_list.push_back(peer);
+  }
+
+  json response = {{"type", "PEERS"}, {"data", peer_list}};
+  session->send(response.dump() + "\n");
 }
 
 // UNKNOWN
