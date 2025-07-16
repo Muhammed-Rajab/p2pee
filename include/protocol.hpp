@@ -7,7 +7,7 @@
 
 #include <nlohmann/json.hpp>
 
-class Protocol {
+class ServerProtocol {
 
 private:
   Node &node;
@@ -21,7 +21,7 @@ private:
   void handle_missing_type(std::shared_ptr<Session> session);
 
 public:
-  Protocol(Node &node_);
+  ServerProtocol(Node &node_);
   void handle(const std::string &message, std::shared_ptr<Session> session);
 };
 

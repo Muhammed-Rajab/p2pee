@@ -78,6 +78,6 @@ std::string Node::to_string() const {
 void Node::handle_message(const std::string &msg,
                           std::shared_ptr<Session> session) {
   // use protocol here
-  Protocol ptcol(*this);
+  ServerProtocol ptcol(*this);
   ptcol.handle(msg, session);
 }

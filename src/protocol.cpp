@@ -8,10 +8,10 @@
 using json = nlohmann::json;
 
 // PUBLIC METHODS
-Protocol::Protocol(Node &node_) : node(node_) {}
+ServerProtocol::ServerProtocol(Node &node_) : node(node_) {}
 
-void Protocol::handle(const std::string &message,
-                      std::shared_ptr<Session> session) {
+void ServerProtocol::handle(const std::string &message,
+                            std::shared_ptr<Session> session) {
 
   /*
    * XXX:
@@ -60,14 +60,14 @@ void Protocol::handle(const std::string &message,
 // PRIVATE METHODS
 
 // PING
-void Protocol::handle_ping(std::shared_ptr<Session> session) {
+void ServerProtocol::handle_ping(std::shared_ptr<Session> session) {
   json response = {{"type", "PONG"}};
   session->send(response.dump() + "\n");
 }
 
 // HELLO
-void Protocol::handle_hello(const json &data,
-                            std::shared_ptr<Session> session) {
+void ServerProtocol::handle_hello(const json &data,
+                                  std::shared_ptr<Session> session) {
   // get all data
   try {
     if (!data.contains("id") || !data.contains("address") ||
@@ -114,8 +114,8 @@ void Protocol::handle_hello(const json &data,
 }
 
 // PEERS
-void Protocol::handle_peers(const json &data,
-                            std::shared_ptr<Session> session) {
+void ServerProtocol::handle_peers(const json &data,
+                                  std::shared_ptr<Session> session) {
   // TODO: Maybe also get ID from the peer and give peer list only if the
   // requester is also a PEER?
   json peer_list = json::array();
@@ -128,8 +128,8 @@ void Protocol::handle_peers(const json &data,
 }
 
 // UNKNOWN
-void Protocol::handle_unknown(const std::string &type,
-                              std::shared_ptr<Session> session) {
+void ServerProtocol::handle_unknown(const std::string &type,
+                                    std::shared_ptr<Session> session) {
   json response = {{"type", "ERROR"},
                    {"message", "unknown message type: " + type}};
 
@@ -137,7 +137,7 @@ void Protocol::handle_unknown(const std::string &type,
 }
 
 // MISSING TYPE
-void Protocol::handle_missing_type(std::shared_ptr<Session> session) {
+void ServerProtocol::handle_missing_type(std::shared_ptr<Session> session) {
   json response = {{"type", "ERROR"}, {"message", "missing type"}};
 
   session->send(response.dump() + "\n");

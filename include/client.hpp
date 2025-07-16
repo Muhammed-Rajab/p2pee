@@ -1,6 +1,8 @@
 #ifndef CLIENT_4_P2PEE_HPP
 #define CLIENT_4_P2PEE_HPP
 
+// TODO: turn client into a static class with no state
+
 #include <boost/asio/read_until.hpp>
 #include <boost/asio/streambuf.hpp>
 #include <boost/asio/write.hpp>
@@ -25,7 +27,7 @@ private:
 public:
   Client(boost::asio::io_context &io_context_)
       : resolver(tcp::resolver(io_context_)), socket(io_context_) {}
-  ~Client() {}
+  ~Client() { close(); }
 
   void connect_to(std::string address, unsigned short port) {
     if (socket.is_open())
@@ -71,6 +73,8 @@ public:
       if (ec) {
         std::cerr << "error closing socket: " << ec.message() << std::endl;
       }
+
+      socket = tcp::socket(socket.get_executor());
     }
   }
 };
