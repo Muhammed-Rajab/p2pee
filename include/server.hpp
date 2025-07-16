@@ -27,6 +27,8 @@ private:
             std::string line;
             std::getline(is, line);
             handler_(line, self); // calls Node's handler
+          } else if (ec == boost::asio::error::eof) {
+            std::cout << "client disconnected.\n";
           } else {
             std::cout << "read error: " << ec.message() << std::endl;
           }

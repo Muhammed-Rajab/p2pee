@@ -47,3 +47,20 @@ target_link_libraries(p2pee PRIVATE
   OpenSSL::Crypto
   Boost::system
 )
+
+# 2. asio-client test
+add_executable(client_test
+  ./asio-client.cpp
+)
+
+target_include_directories(client_test PRIVATE
+  ${json_SOURCE_DIR}/include
+  include
+)
+
+target_link_libraries(client_test PRIVATE
+  nlohmann_json::nlohmann_json
+  OpenSSL::SSL
+  OpenSSL::Crypto
+  Boost::system
+)
